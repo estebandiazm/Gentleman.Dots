@@ -88,7 +88,11 @@
                 fish
                 zsh
                 nushell
-
+                which
+                gawk
+                perl
+                coreutils
+                gnused
                 # ─── Window management (macOS) ───
                 # yabai, skhd, and sketchybar are installed via Homebrew modules.
 
