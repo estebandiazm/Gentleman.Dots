@@ -1,0 +1,4 @@
+{
+  home.username = "your-macos-username";
+  home.homeDirectory = "/Users/your-macos-username";
+}

@@ -16,10 +16,6 @@
       # Support macOS systems only
       supportedSystems = [ "x86_64-darwin" "aarch64-darwin" ];
       
-      # ─── User Configuration ───
-      # Change this to your macOS username
-      username = "jdiaz";
-
       # Function to create home configuration for a specific system
       mkHomeConfiguration = system:
         let
@@ -74,10 +70,8 @@
             # ./simple-bar.nix  # simple-bar for Übersicht (disabled - using sketchybar)
             ./sketchybar.nix  # SketchyBar status bar
             ./raycast.nix  # Raycast scripts
+            ./personal.nix  # Machine-specific Home Manager settings
             {
-              # Personal data
-              home.username = username;
-              home.homeDirectory = "/Users/${username}";  # macOS home directory
               home.stateVersion = "24.11";  # State version
 
               # Base packages that should be available everywhere
