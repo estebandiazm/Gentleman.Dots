@@ -10,17 +10,14 @@ monitor = "main"
 [4]
 monitor = "main"
 
-[5]
-monitor = "main"
-
 [6]
 displayName = "❤️"
 monitor = "specific"
-monitorName = "Elgato Prom."
-monitorDisplayId = 6
+monitorName = "Built-in Retina Display"
+monitorDisplayId = 1
 
 [7]
 displayName = "🚀"
 monitor = "specific"
-monitorName = "ARZOPA"
-monitorDisplayId = 5
+monitorName = "Built-in Retina Display"
+monitorDisplayId = 1
