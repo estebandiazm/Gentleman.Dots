@@ -62,13 +62,8 @@
             ./claude.nix  # Claude Code CLI configuration
             ./engram.nix  # Engram memory layer for AI agents
             ./herdr.nix  # Herdr agent multiplexer configuration
-            ./yabai.nix  # Yabai window manager configuration
-            ./skhd.nix  # Skhd hotkey daemon configuration
-            # Nehir (Niri-style WM) trial reverted — back to yabai/skhd/sketchybar.
-            # nehir.nix and nehir/ config are kept in the repo for a future retry.
-            # ./nehir.nix  # Nehir (Niri-style WM) configuration
-            # ./simple-bar.nix  # simple-bar for Übersicht (disabled - using sketchybar)
-            ./sketchybar.nix  # SketchyBar status bar
+            # This machine uses Nehir instead of the Yabai/skhd/SketchyBar stack.
+            ./nehir.nix  # Nehir (Niri-style WM) configuration
             ./raycast.nix  # Raycast scripts
             ./personal.nix  # Machine-specific Home Manager settings
             {
