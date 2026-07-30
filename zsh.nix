@@ -113,7 +113,7 @@
       WM_CMD="tmux"
 
       function start_if_needed() {
-        if [[ $- == *i* ]] && [[ -z "''${WM_VAR#/}" ]] && [[ -t 1 ]] && [[ -z "$ZED_TERMINAL" ]]; then
+        if [[ $- == *i* ]] && [[ -z "''${WM_VAR#/}" ]] && [[ -t 1 ]] && [[ -z "$ZED_TERMINAL" ]] && [[ -z "$HERDR_ENV" ]]; then
           exec $WM_CMD
         fi
       }
