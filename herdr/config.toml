@@ -17,6 +17,9 @@ yellow = "#DEBA87"
 
 [ui]
 accent = "#6FA0AF"
+sidebar_width = 34
+sidebar_min_width = 28
+sidebar_max_width = 44
 
 [worktrees]
 directory = "/Users/jdiaz/workspace/worktree"
