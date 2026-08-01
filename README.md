@@ -10,6 +10,40 @@
 
 This repository provides a complete, declarative development environment configuration using Nix Flakes and Home Manager. Everything is configured through local modules and automatically installs all dependencies.
 
+## Personal Fork Workflow
+
+Personal integration work lives in the `estebandiazm/Gentleman.Dots` fork on
+`personal/config`. The official `Gentleman-Programming/Gentleman.Dots` remote
+is fetch-only and remains the source for upstream updates. The legacy
+`jdiaz/config` branch is retained as a compatibility alias and must not be
+deleted until every checkout has moved to `personal/config`.
+
+Use the personal SSH host when cloning on either Mac:
+
+```sh
+git clone git@personal.github.com:estebandiazm/Gentleman.Dots.git
+cd Gentleman.Dots
+git switch --track origin/personal/config
+```
+
+To update from upstream, fetch it explicitly and rebase the personal branch
+only after reviewing the divergence:
+
+```sh
+git fetch upstream
+git rebase upstream/main
+git push
+```
+
+### Local Shell Profiles
+
+The managed Zsh configuration loads `~/.exports` before shell tool
+initialization and `~/.aliases` afterward, only when each file is readable.
+These are local executable Zsh files, not configuration data: keep them trusted,
+machine-specific, and out of Git. Example comments are provided at
+`templates/exports.example` and `templates/aliases.example`; never commit real
+credentials, tokens, or private aliases.
+
 ### 🛠️ Development Tools & Languages
 
 - **Languages**: Node.js, Bun, Cargo/Rust, Go, GCC

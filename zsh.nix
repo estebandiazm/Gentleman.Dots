@@ -12,6 +12,12 @@
 
   home.file.".zshrc" = {
     text = ''
+      # Local files are intentionally untracked because source executes shell code.
+      # Load exports before tool initialization so local environment values are available.
+      if [[ -r "$HOME/.exports" ]]; then
+        source "$HOME/.exports"
+      fi
+
       # --------------------------
       # 1) ZPLUG
       # --------------------------
@@ -65,6 +71,11 @@
       eval "$(zoxide init zsh)"
       eval "$(atuin init zsh)"
       eval "$(starship init zsh)"
+
+      # Load local aliases after managed aliases so profile-specific definitions win.
+      if [[ -r "$HOME/.aliases" ]]; then
+        source "$HOME/.aliases"
+      fi
 
       # --------------------------
       # 7) Yazi + Zed function

@@ -25,6 +25,10 @@ Thumbs.db
 *.tmp
 *.temp
 
+# Legacy local shell profiles. They are executable, profile-specific, and private.
+.exports
+.aliases
+
 # Local Pi runtime state
 .atl/
 .pi/

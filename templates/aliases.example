@@ -1,0 +1,3 @@
+# Local aliases for this machine.
+# Copy to ~/.aliases. This file is sourced as Zsh code and must stay private.
+# alias example-project='cd ~/Projects/example'
