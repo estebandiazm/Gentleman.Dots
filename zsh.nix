@@ -94,7 +94,7 @@
       # --------------------------
       # 8) PATH and Brew
       # --------------------------
-      export PATH="$HOME/.local/bin:$HOME/.local/state/nix/profiles/home-manager/home-path/bin:$HOME/.opencode/bin:$HOME/.cargo/bin:$HOME/.volta/bin:$HOME/.bun/bin:$HOME/.nix-profile/bin:/nix/var/nix/profiles/default/bin:/usr/local/bin:$PATH"
+      export PATH="$HOME/bin:$HOME/.local/bin:$HOME/.local/state/nix/profiles/home-manager/home-path/bin:$HOME/.opencode/bin:$HOME/.cargo/bin:$HOME/.volta/bin:$HOME/.bun/bin:$HOME/.nix-profile/bin:/nix/var/nix/profiles/default/bin:/usr/local/bin:$PATH"
 
       if [[ "$(uname)" == "Darwin" ]]; then
         export BREW_BIN="/opt/homebrew/bin"
