@@ -107,20 +107,7 @@
       fi
 
       # --------------------------
-      # 9) TMUX auto-start
-      # --------------------------
-      WM_VAR="/$TMUX"
-      WM_CMD="tmux"
-
-      function start_if_needed() {
-        if [[ $- == *i* ]] && [[ -z "''${WM_VAR#/}" ]] && [[ -t 1 ]] && [[ -z "$ZED_TERMINAL" ]] && [[ -z "$HERDR_ENV" ]]; then
-          exec $WM_CMD
-        fi
-      }
-      start_if_needed
-
-      # --------------------------
-      # 10) Clear screen
+      # 9) Clear screen
       # --------------------------
       clear
     '';
