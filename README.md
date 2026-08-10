@@ -10,6 +10,28 @@
 
 This repository provides a complete, declarative development environment configuration using Nix Flakes and Home Manager. Everything is configured through local modules and automatically installs all dependencies.
 
+## Using as a Home Manager Library
+
+> **New in 2026:** `Gentleman.Dots` exposes `homeModules` flake outputs so downstream flakes can
+> consume individual modules without owning identity. The canonical standalone entrypoint for a
+> fresh-Mac setup is **[estebandiazm/dotfiles](https://github.com/estebandiazm/dotfiles)** —
+> clone that repo instead of this one if you just want to reproduce the full environment.
+
+```nix
+# In your flake.nix:
+inputs.gentleman.url = "github:estebandiazm/Gentleman.Dots/personal/config";
+
+# In your host module:
+imports = [ inputs.gentleman.homeModules.default ];
+# or pick individual modules:
+# imports = with inputs.gentleman.homeModules; [ zsh tmux nvim fish ];
+```
+
+Consumer contract: your flake must provide `extraSpecialArgs = { inherit unstablePkgs; }` where
+`unstablePkgs = import nixpkgs-unstable { inherit system; config.allowUnfree = true; }`.
+
+---
+
 ## Personal Fork Workflow
 
 Personal integration work lives in the `estebandiazm/Gentleman.Dots` fork on

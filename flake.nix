@@ -11,11 +11,73 @@
     flake-utils.url = "github:numtide/flake-utils";  # Flake utilities
   };
 
-  outputs = { nixpkgs, nixpkgs-unstable, home-manager, flake-utils, ... }:
+  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, flake-utils, ... }:
     let
       # Support macOS systems only
       supportedSystems = [ "x86_64-darwin" "aarch64-darwin" ];
-      
+
+      # ─── Library: reusable Home Manager modules ───────────────────────────
+      # Consumers import homeModules.default (full stack) or individual modules
+      # (homeModules.<name>) via extraSpecialArgs = { inherit unstablePkgs; }.
+      # personal.nix is intentionally excluded from default — identity is opt-in.
+      homeModules = {
+        # Aggregate module: wraps all tool modules as { imports = [...]; }.
+        # Consumers use: imports = [ gentleman.homeModules.default ];
+        # Excludes personal.nix so consumers own home.username / homeDirectory.
+        default = {
+          imports = [
+            ./nushell.nix
+            ./ghostty.nix
+            ./alacritty.nix
+            ./zed.nix
+            ./television.nix
+            ./wezterm.nix
+            ./kitty.nix
+            ./zellij.nix
+            ./tmux.nix
+            ./tmux-agents.nix
+            ./fish.nix
+            ./nvim.nix
+            ./zsh.nix
+            ./oil-scripts.nix
+            ./opencode.nix
+            ./claude.nix
+            ./engram.nix
+            ./herdr.nix
+            ./nehir.nix
+            ./raycast.nix
+            ./base-packages.nix
+          ];
+        };
+
+        # Per-module attrs — downstream flakes can pick individual modules.
+        alacritty    = ./alacritty.nix;
+        base-packages = ./base-packages.nix;
+        claude       = ./claude.nix;
+        engram       = ./engram.nix;
+        fish         = ./fish.nix;
+        ghostty      = ./ghostty.nix;
+        herdr        = ./herdr.nix;
+        kitty        = ./kitty.nix;
+        nehir        = ./nehir.nix;
+        nushell      = ./nushell.nix;
+        nvim         = ./nvim.nix;
+        oil-scripts  = ./oil-scripts.nix;
+        opencode     = ./opencode.nix;
+        raycast      = ./raycast.nix;
+        television   = ./television.nix;
+        tmux         = ./tmux.nix;
+        tmux-agents  = ./tmux-agents.nix;
+        wezterm      = ./wezterm.nix;
+        zed          = ./zed.nix;
+        zellij       = ./zellij.nix;
+        zsh          = ./zsh.nix;
+
+        # Identity module: opt-in only — NOT in default.
+        # Exposes home.username / homeDirectory for Gentleman's own activation.
+        personal     = ./personal.nix;
+      };
+
       # Function to create home configuration for a specific system
       mkHomeConfiguration = system:
         let
@@ -23,12 +85,6 @@
             inherit system;
             config.allowUnfree = true;
           };
-          nodeWithoutNpm = pkgs.runCommand "nodejs-without-npm-${pkgs.nodejs.version}" { } ''
-            mkdir -p "$out/bin"
-            ln -s ${pkgs.nodejs}/bin/node "$out/bin/node"
-            ln -s ${pkgs.nodejs}/bin/corepack "$out/bin/corepack"
-          '';
-          
           unstablePkgs = import nixpkgs-unstable {
             inherit system;
             config.allowUnfree = true;
@@ -36,117 +92,30 @@
         in
         home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
-          
+
           # Pass extraSpecialArgs to make unstablePkgs available in modules
           extraSpecialArgs = {
             inherit unstablePkgs;
           };
-          
+
           modules = [
-            ./nushell.nix  # Nushell configuration
-            ./ghostty.nix  # Ghostty configuration
-            ./alacritty.nix  # Alacritty configuration
-            ./zed.nix  # Zed configuration
-            ./television.nix  # Television configuration
-            ./wezterm.nix  # WezTerm configuration
-            ./kitty.nix  # Kitty configuration
-            ./zellij.nix  # Zellij configuration
-            ./tmux.nix  # Tmux configuration
-            ./tmux-agents.nix  # Tmux agent-state notifier (working/blocked/idle)
-            ./fish.nix  # Fish shell configuration
-            ./starship.nix  # Starship prompt configuration
-            ./nvim.nix  # Neovim configuration
-            ./zsh.nix  # Zsh configuration
-            ./oil-scripts.nix  # Oil.nvim scripts configuration
-            ./opencode.nix  # OpenCode AI assistant configuration
-            ./claude.nix  # Claude Code CLI configuration
-            ./engram.nix  # Engram memory layer for AI agents
-            ./herdr.nix  # Herdr agent multiplexer configuration
-            # This machine uses Nehir instead of the Yabai/skhd/SketchyBar stack.
-            ./nehir.nix  # Nehir (Niri-style WM) configuration
-            ./raycast.nix  # Raycast scripts
-            ./personal.nix  # Machine-specific Home Manager settings
-            {
-              home.stateVersion = "24.11";  # State version
-
-              # Base packages that should be available everywhere
-              home.packages = with pkgs; [
-                # ─── Terminals and utilities ───
-                zellij
-                tmux
-                fish
-                zsh
-                nushell
-                which
-                gawk
-                perl
-                coreutils
-                gnused
-                # ─── Window management (macOS) ───
-                # yabai, skhd, and sketchybar are installed via Homebrew modules.
-
-                # ─── Development tools ───
-                volta
-                carapace
-                zoxide
-                atuin
-                jq
-                bash
-                starship
-                fzf
-                nodeWithoutNpm
-                unstablePkgs.pnpm
-                bun
-                cargo
-                go
-                nil
-                unstablePkgs.nixd
-                unstablePkgs.neovim
-                tree-sitter
-
-                # ─── Compilers and system utilities ───
-                gcc
-                fd
-                ripgrep
-                coreutils
-                unzip
-                bat
-                lazygit
-                yazi
-                television
-
-                # ─── Nerd Fonts ───
-                nerd-fonts.iosevka-term
-              ];
-
-              # Enable programs explicitly (critical for binaries to appear)
-              # All program enables are centralized here
-              programs.neovim.enable = false;
-              programs.fish.enable = true;
-              programs.nushell.enable = true;
-              programs.starship.enable = false;
-              programs.zsh.enable = false;  # Managed via home.file in zsh.nix
-              programs.git.enable = true;
-              programs.gh.enable = true;  # GitHub CLI
-              programs.home-manager.enable = true;
-              # Note: tmux is configured via home.file in tmux.nix, not programs.tmux
-
-              # NOTE: home.sessionVariables removed - it generates a recursive .zshenv bug
-              # XDG_CONFIG_HOME is set in shell configs instead
-
-              # Allow unfree packages
-              nixpkgs.config.allowUnfree = true;
-            }
+            homeModules.default  # Full tool stack (attrset with imports = [...])
+            ./personal.nix       # Identity: home.username / homeDirectory (Gentleman-specific)
+            { home.stateVersion = "24.11"; }
           ];
         };
     in
     {
-      # Home Manager configurations for each system
+      # ─── Library outputs ─────────────────────────────────────────────────
+      # Downstream flakes (e.g. estebandiazm/dotfiles) consume these.
+      inherit homeModules;
+
+      # ─── Home Manager configurations (legacy / direct activation) ────────
       homeConfigurations = {
         # macOS system configurations
         "gentleman-macos-intel" = mkHomeConfiguration "x86_64-darwin";
-        "gentleman-macos-arm" = mkHomeConfiguration "aarch64-darwin";
-        
+        "gentleman-macos-arm"   = mkHomeConfiguration "aarch64-darwin";
+
         # Default to Apple Silicon
         "gentleman" = mkHomeConfiguration "aarch64-darwin";
       };
