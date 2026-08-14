@@ -115,6 +115,20 @@
         eval "$($BREW_BIN/brew shellenv)"
       fi
 
+      # ---------------------------
+      # 1Password (macOS)
+      # ---------------------------
+      if [[ "$(uname)" == "Darwin" ]]; then
+        if [[ -r "$HOME/.config/op/plugins.sh" ]]; then
+          source "$HOME/.config/op/plugins.sh"
+        fi
+
+        onepassword_ssh_sock="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+        if [[ -z "$SSH_AUTH_SOCK" && -S "$onepassword_ssh_sock" ]]; then
+          export SSH_AUTH_SOCK="$onepassword_ssh_sock"
+        fi
+      fi
+
       # --------------------------
       # 9) Clear screen
       # --------------------------
