@@ -34,11 +34,13 @@ Consumer contract: your flake must provide `extraSpecialArgs = { inherit unstabl
 
 ## Personal Fork Workflow
 
-Personal integration work lives in the `estebandiazm/Gentleman.Dots` fork on
-`personal/config`. The official `Gentleman-Programming/Gentleman.Dots` remote
-is fetch-only and remains the source for upstream updates. The legacy
-`jdiaz/config` branch is retained as a compatibility alias and must not be
-deleted until every checkout has moved to `personal/config`.
+Shared personalizations live in the `estebandiazm/Gentleman.Dots` fork on
+`personal/config`. This is the common base for both Macs, including Nehir,
+shells, terminal configuration, editors, themes, and keyboard workflow.
+`jdiaz/config` is the work-only layer: it imports that base and adds corporate
+or work-machine settings such as the Herdr worktree location. The official
+`Gentleman-Programming/Gentleman.Dots` remote is fetch-only and remains the
+source for upstream updates.
 
 Use the personal SSH host when cloning on either Mac:
 
@@ -65,6 +67,11 @@ These are local executable Zsh files, not configuration data: keep them trusted,
 machine-specific, and out of Git. Example comments are provided at
 `templates/exports.example` and `templates/aliases.example`; never commit real
 credentials, tokens, or private aliases.
+
+On macOS, the managed Zsh configuration also enables 1Password shell plugins
+when `~/.config/op/plugins.sh` exists. It uses the 1Password SSH agent only
+when `SSH_AUTH_SOCK` is not already set, so a deliberate machine-local agent
+selection in `~/.exports` takes precedence.
 
 ### 🛠️ Development Tools & Languages
 
@@ -464,19 +471,23 @@ build-users-group = nixbld
 
 _(This is necessary because support for flakes and the new Nix command is still experimental, but it allows us to have a fully declarative and reproducible configuration.)_
 
-### 3. Configure Your Username
+### 3. Configure Your Identity
 
-**No need to edit `flake.nix` for system configuration!** The flake supports both Intel and Apple Silicon Macs.
+**No need to edit `flake.nix` for identity configuration.** The flake supports
+both Intel and Apple Silicon Macs.
 
-You only need to update the `username` variable at the top of `flake.nix` (around line 20):
+For the standalone configuration, set the account identity in `personal.nix`:
 
 ```nix
-# ─── User Configuration ───
-# Change this to your macOS username
-username = "YourUser";  # ← Replace with your username
+{
+  home.username = "YourUser";
+  home.homeDirectory = "/Users/YourUser";
+}
 ```
 
-This single variable is used for both `home.username` and `home.homeDirectory`, so you only need to change it in one place.
+Keep this file limited to declarative Home Manager identity. Put credentials,
+machine-local variables, and private aliases in the untracked local shell
+profiles described above.
 
 ### 4. Install Terminal Emulators (Optional)
 
