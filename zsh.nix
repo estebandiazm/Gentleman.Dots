@@ -124,7 +124,7 @@
         fi
 
         onepassword_ssh_sock="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
-        if [[ -z "$SSH_AUTH_SOCK" && -S "$onepassword_ssh_sock" ]]; then
+        if [[ -S "$onepassword_ssh_sock" ]]; then
           export SSH_AUTH_SOCK="$onepassword_ssh_sock"
         fi
       fi
