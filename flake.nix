@@ -20,7 +20,7 @@
       # Consumers import homeModules.default (full stack) or individual modules
       # (homeModules.<name>) via extraSpecialArgs = { inherit unstablePkgs; }.
       # personal.nix is intentionally excluded from default — identity is opt-in.
-      homeModules = {
+      homeModules = rec {
         # Aggregate module: wraps all tool modules as { imports = [...]; }.
         # Consumers use: imports = [ gentleman.homeModules.default ];
         # Excludes personal.nix so consumers own home.username / homeDirectory.
@@ -76,6 +76,15 @@
         # Identity module: opt-in only — NOT in default.
         # Exposes home.username / homeDirectory for Gentleman's own activation.
         personal     = ./personal.nix;
+
+        # Work-only layer. It inherits the shared personal workflow, including
+        # Nehir, and adds settings that belong only on the work Mac.
+        work = {
+          imports = [
+            default
+            ./modules/work.nix
+          ];
+        };
       };
 
       # Function to create home configuration for a specific system
@@ -99,7 +108,7 @@
           };
 
           modules = [
-            homeModules.default  # Full tool stack (attrset with imports = [...])
+            homeModules.work     # Shared workflow plus the work-only layer.
             ./personal.nix       # Identity: home.username / homeDirectory (Gentleman-specific)
             { home.stateVersion = "24.11"; }
           ];
