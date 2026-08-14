@@ -69,9 +69,9 @@ machine-specific, and out of Git. Example comments are provided at
 credentials, tokens, or private aliases.
 
 On macOS, the managed Zsh configuration also enables 1Password shell plugins
-when `~/.config/op/plugins.sh` exists. It uses the 1Password SSH agent only
-when `SSH_AUTH_SOCK` is not already set, so a deliberate machine-local agent
-selection in `~/.exports` takes precedence.
+when `~/.config/op/plugins.sh` exists. When the 1Password SSH socket is
+available, it takes precedence over the macOS launchd agent. macOS remains the
+fallback when 1Password is unavailable.
 
 ### 🛠️ Development Tools & Languages
 
