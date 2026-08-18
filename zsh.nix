@@ -67,6 +67,9 @@
       # 6) Tools initialization
       # --------------------------
       eval "$(zoxide init zsh)"
+      if command -v direnv &>/dev/null; then
+        eval "$(direnv hook zsh)"
+      fi
       eval "$(atuin init zsh)"
       eval "$(starship init zsh)"
 
